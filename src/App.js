@@ -1,11 +1,20 @@
-import "theme/base.css";
-import VideoList from "./components/containers/VideoList";
-import api from "api";
+import React from 'react';
+import api from 'APIs';
+import styled from 'styled-components';
+import bg from 'assets/background.png';
+import VideoList from './components/containers/VideoList';
+
+const Root = styled.div`
+  background-image: url(${bg});
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+`;
 function App() {
   return (
-    <div className="App">
+    <Root id="root">
       <VideoList getVideos={api.getVideos} />
-    </div>
+    </Root>
   );
 }
 

@@ -1,10 +1,9 @@
-import React from "react";
-import styled from "styled-components";
-import PropTypes from "prop-types";
+import React from 'react';
+import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const Wrapper = styled.div`
-  position: ${({ relativeToParent }) =>
-    relativeToParent ? "absolute" : "fixed"};
+  position: ${({ relativeToParent }) => (relativeToParent ? 'absolute' : 'fixed')};
   top: 0%;
   left: 0;
   right: 0;
@@ -48,10 +47,10 @@ const Spinner = ({ relativeToParent }) => (
 );
 
 Spinner.propTypes = {
-  relativeToParent: PropTypes.bool
+  relativeToParent: PropTypes.bool,
 };
 
 Spinner.defaultProps = {
-  relativeToParent: false
+  relativeToParent: false,
 };
 export default Spinner;

@@ -1,25 +1,42 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components";
-import ReactPlayer from "react-player";
-import Spinner from "components/common/spinner";
+import React from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import ReactPlayer from 'react-player';
+import Spinner from 'components/common/spinner';
+
+const videoRatio = (9 * 100) / 16; // this is 16/9 ratio
 
 const defaultVideoSettings = {
   controls: true,
-  height: "100%",
+  height: '100%',
   muted: true,
   playing: false,
-  preload: "auto",
-  width: "100%"
+  preload: 'auto',
+  width: '100%',
 };
 
 const Wrapper = styled.div`
   border-radius: 5px;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
-  margin: 10px;
   overflow: hidden;
-  padding-bottom: 50%;
+  padding-bottom: ${videoRatio}%;
   position: relative;
+  background-color: rgba(255, 255, 255, 0.4);
+  &:before {
+    content: "";
+    position: absolute;
+    width: calc(100% + 5px);
+    height: calc(100% + 5px);
+    top: -5px;
+    left: -5px;
+    border: 5px solid transparent;
+  }
+
+  &:hover {
+    &:before {
+      border-color: red;
+    }
+  }
   > div {
     position: absolute;
     width: 100%;
@@ -37,11 +54,11 @@ const Wrapper = styled.div`
   }
 `;
 
-const VideoCard = ({ className, src }) => {
-  const classes = ["VideoCard"];
+const VideoCard = ({ className, videoDetails }) => {
+  const classes = ['VideoCard'];
   const [videoIsReady, setVideoIsReady] = React.useState(false);
   const [videoSettings, setVideoSettings] = React.useState(
-    defaultVideoSettings
+    defaultVideoSettings,
   );
 
   if (className) classes.push(className);
@@ -49,7 +66,7 @@ const VideoCard = ({ className, src }) => {
   function handleMouseEnter() {
     setVideoSettings({
       ...videoSettings,
-      playing: true
+      playing: true,
     });
   }
 
@@ -63,30 +80,42 @@ const VideoCard = ({ className, src }) => {
 
   return (
     <Wrapper
-      className={classes.join(" ")}
+      className={classes.join(' ')}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {src ? (
+      {videoDetails.src ? (
         <>
           {!videoIsReady && <Spinner relativeToParent />}
-          <ReactPlayer url={src} {...videoSettings} onReady={onReady} />
+          <ReactPlayer
+            url={videoDetails.src}
+            {...videoSettings}
+            onReady={onReady}
+          />
         </>
       ) : (
-        <div className="placeholder">Other video</div>
+        <div className="placeholder">
+          Other video
+          &nbsp;
+          {videoDetails.key}
+        </div>
       )}
     </Wrapper>
   );
 };
 
-VideoCard.displayName = "VideoCard";
+VideoCard.displayName = 'VideoCard';
 
 VideoCard.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
+  videoDetails: PropTypes.shape({
+    key: PropTypes.string.isRequired,
+    src: PropTypes.string,
+  }).isRequired,
 };
 
 VideoCard.defaultProps = {
-  className: null
+  className: null,
 };
 
 export default VideoCard;

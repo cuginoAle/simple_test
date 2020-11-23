@@ -1,42 +1,33 @@
-import React from "react";
-import PropTypes from "prop-types";
-import styled from "styled-components";
-import VideoCard from "components/views/VideoCard";
+import React from 'react';
+import PropTypes from 'prop-types';
+import VideoListView from '../views/VideoListView';
 
-const Wrapper = styled.ul`
-  > li {
-  }
-`;
-
-const VideoList = ({ className, getVideos }) => {
+const VideoList = ({ getVideos }) => {
   const [videos, setVideos] = React.useState([]);
 
-  const classes = ["VideoList"];
-  if (className) classes.push(className);
-
   React.useEffect(() => {
-    getVideos().then(data => setVideos(data));
+    getVideos()
+      .then((data = []) => {
+      // creating some dummy data
+        const placeholders = Array.from(new Array(20)).map((item, index) => ({
+          key: `video ${index}`,
+        }));
+
+        setVideos([...data, ...placeholders]);
+      })
+      // eslint-disable-next-line no-console
+      .catch((err) => console.error(err));
   }, [getVideos]);
 
-  return (
-    <Wrapper className={classes.join(" ")}>
-      {videos.map(src => (
-        <li key={src}>
-          <VideoCard src={src} />
-        </li>
-      ))}
-    </Wrapper>
-  );
+  return <VideoListView videoList={videos} />;
 };
 
-VideoList.displayName = "VideoList";
+VideoList.displayName = 'VideoList';
 
 VideoList.propTypes = {
-  className: PropTypes.string
+  getVideos: PropTypes.func.isRequired,
 };
 
-VideoList.defaultProps = {
-  className: null
-};
+VideoList.defaultProps = {};
 
 export default VideoList;
